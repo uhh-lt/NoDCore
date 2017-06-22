@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# replace german special characters
+sed 's/Ã¤/ä/g' "$1" > "$2"
+sed -i 's/Ã¼/ü/g' "$2"
+sed -i 's/uÌ/ü/g' "$2"
+sed -i 's/Ã/Ü/g' "$2"
+sed -i 's/Ã¶/ö/g' "$2"
+sed -i 's/Ã/ß/g' "$2"
+
+# replace other special character
+sed -i 's//š/g' "$2"
+sed -i 's//Š/g' "$2"
+
+# replace fancy quotes
+sed -i 's//"/g' "$2"
+sed -i 's/â/"/g' "$2"
+
+sed -i 's//"/g' "$2"
+sed -i 's//"/g' "$2"
+sed -i 's//"/g' "$2"
+sed -i 's//"/g' "$2"
+sed -i 's/â/"/g' "$2"
+sed -i 's/â/"/g' "$2"
+sed -i 's/â/"/g' "$2"
+
+sed -i "s//'/g" "$2"
+sed -i "s/â/'/g" "$2"
+sed -i "s/â/'/g" "$2"
+
+# replace dashes
+sed -i 's/â“/-/g' "$2"
+sed -i 's/â“/-/g' "$2"
+sed -i 's//-/g' "$2"
+sed -i 's//-/g' "$2"
+
+# other characters
+sed -i 's//.../g' "$2"
+sed -i 's//™/g' "$2"
+sed -i 's//†/g' "$2"
+sed -i 's//‰/g' "$2"
+
+# delete characters that are artifact from mining
+sed -i 's///g' "$2" # weird brackets
+sed -i 's///g' "$2" # bullet points
+sed -i 's///g' "$2" # internal link symbols
+sed -i 's///g' "$2" # whatever this is
+
+
+# delete lines that contain unrecognizable characters
+sed -i '/�/d' "$2"
+sed -i '//d' "$2"
+sed -i '//d' "$2"
