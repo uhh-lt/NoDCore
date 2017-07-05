@@ -20,3 +20,7 @@
 - `CREATE USER 'nod'@'localhost' IDENTIFIED BY 'PASSWORD';`
 - `GRANT ALL PRIVILEGES ON nodcore.* TO 'nod'@'localhost';`
 - `FLUSH PRIVILEGES;`
+
+## Docker Compose
+- Extract lib.zip and resources.zip from the [releases](https://github.com/uhh-lt/NoDCore/releases) into the directory
+- Run `docker-compose up`
