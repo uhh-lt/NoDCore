@@ -1,22 +1,32 @@
-version: '3'
+version: '2.1'
 services:
   nodcore:
     build: .
     depends_on:
       - db
+    volumes:
+      - ./content:/app/content
+
+  nodweb:
+    build: ../NoDWeb
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 9000:9000
 
   db:
     image: mariadb
+    restart: always
     volumes:
       - "nod_data:/var/lib/mysql"
-      - "./content:/app/content"
     environment:
        MYSQL_ROOT_PASSWORD: nod
        MYSQL_DATABASE: nodcore
        MYSQL_USER: nod
        MYSQL_PASSWORD: nod
     ports:
-      - "3306:3306"
+      - 3306:3306
 
 volumes:
   nod_data:

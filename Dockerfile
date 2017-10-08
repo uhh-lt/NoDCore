@@ -18,10 +18,8 @@ RUN \
   apt-get install sbt && \
   sbt sbtVersion
 
-
 COPY . /app
 WORKDIR /app
-
 RUN sbt clean compile assembly
 
 CMD java -jar /app/target/scala-2.11/NoDCore-assembly-1.0.jar --dir /app/content --format compressed
