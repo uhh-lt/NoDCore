@@ -23,4 +23,4 @@
 
 ## Docker Compose
 - Extract lib.zip and resources.zip from the [releases](https://github.com/uhh-lt/NoDCore/releases) into the directory
-- Run `docker-compose up`
+- Run `docker-compose up --build`
