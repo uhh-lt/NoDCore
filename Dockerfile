@@ -20,9 +20,6 @@ WORKDIR /app
 RUN sbt clean compile assembly
 RUN mv target/scala-2.11/NoDCore-assembly-1.0.jar /app/NoDCore-assembly-1.0.jar && rm -rf /app/target
 
-RUN touch crontab.tmp \
-    && echo '0 3 * * * /app/docker-run.sh' > crontab.tmp \
-    && crontab crontab.tmp \
-    && rm -rf crontab.tmp
+RUN crontab crontab
 
 CMD crond -l 5 -f

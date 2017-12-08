@@ -1,0 +1,1 @@
+30 2 * * * /bin/bash /app/docker-run.sh
