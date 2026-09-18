@@ -57,10 +57,10 @@ abstract class CleaningStrategy {
     Map(
       "entities" -> Map(
         "count" -> cEntities.get,
-        "frequency" -> fEntities.get),
+        "frequency" -> fEntities.getOrElse(0L)),
       "relationships" -> Map(
         "count" -> cRelationships.get,
-        "frequency" -> fRelationships.get),
+        "frequency" -> fRelationships.getOrElse(0L)),
       "sentences" -> Map(
         "count" -> cSent.get),
       "sent2sources" -> Map(
