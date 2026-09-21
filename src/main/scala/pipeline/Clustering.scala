@@ -44,24 +44,31 @@ class Clustering extends ProcessingUnit with DatabaseUsage {
         val graphRepr = graphForDate(date)
         val components = weakComponents(graphRepr.graph)
 
-        val trendWordIds = retrieveTrendWords(date, trendWordLimit)
-        val importantComponents = components.filter(c => c.exists(id => trendWordIds.contains(id)))
+        if (components.isEmpty) {
 
-        //importantComponents ++= components.filter(_.size > 7)
-        //importantComponents ++= components.toList.sortBy(_.size).reverse.take(9)
-        val biggestComponent = components.maxBy(_.size)
-        //GraphUtils.exportGraphToTsv(graphRepr.graph, graphRepr.entities, graphRepr.relationships, Paths.get("/home/toa/"))
-        importantComponents += biggestComponent
-        val subgraph = createSubgraph(graphRepr.graph, importantComponents.flatten.toSet)
-        val clusters = cluster(subgraph, graphRepr.entities, graphRepr.relationships)
+          //No entity survived the import for this date, so there is nothing to cluster.
+          println("No entity co-occurrences for %s - skipping clustering.".format(date))
+        } else {
 
-        val expandedNetwork = expand(clusters, trendWordIds.toSet, subgraph, graphRepr.entities, graphRepr.relationships)
-        val networkAsJson = expandedNetwork.convertToJson(graphRepr.entities, graphRepr.relationships, filter = true)
+          val trendWordIds = retrieveTrendWords(date, trendWordLimit)
+          val importantComponents = components.filter(c => c.exists(id => trendWordIds.contains(id)))
 
-        DB localTx { implicit session =>
+          //importantComponents ++= components.filter(_.size > 7)
+          //importantComponents ++= components.toList.sortBy(_.size).reverse.take(9)
+          val biggestComponent = components.maxBy(_.size)
+          //GraphUtils.exportGraphToTsv(graphRepr.graph, graphRepr.entities, graphRepr.relationships, Paths.get("/home/toa/"))
+          importantComponents += biggestComponent
+          val subgraph = createSubgraph(graphRepr.graph, importantComponents.flatten.toSet)
+          val clusters = cluster(subgraph, graphRepr.entities, graphRepr.relationships)
 
-          val clusterId = storeCluster(date, networkAsJson)
-          storeTrendWords(clusterId, trendWordIds)
+          val expandedNetwork = expand(clusters, trendWordIds.toSet, subgraph, graphRepr.entities, graphRepr.relationships)
+          val networkAsJson = expandedNetwork.convertToJson(graphRepr.entities, graphRepr.relationships, filter = true)
+
+          DB localTx { implicit session =>
+
+            val clusterId = storeCluster(date, networkAsJson)
+            storeTrendWords(clusterId, trendWordIds)
+          }
         }
       }
 
